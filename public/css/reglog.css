@@ -19,6 +19,7 @@ body{
     align-items: center;
     gap: 1em;
     box-shadow: 2px 2px 10px 1px green;
+    margin: 1em;
 }
 .form > h1{
     width: 90%;
@@ -50,4 +51,18 @@ body{
     color: white;
     border: none;
     box-shadow: 1px 1px 10px 1px green;
+}
+.message-danger{
+    width: 100%;
+    padding: 0.8em;
+    text-align: center;
+    background-color: rgb(243, 141, 141);
+    font-size: 1.5em;
+}
+.message-success{
+    width: 100%;
+    padding: 0.5em;
+    text-align: center;
+    background-color: rgb(139, 243, 139);
+    font-size: 1.5em;
 }

@@ -1,30 +1,33 @@
 <link rel="stylesheet" href="/css/reglog.css">
 <title> Register </title>
 
-<form action="" method="get" class="form">
-    <h1> Register </h1>
-    <div class="form-data">
-        <label for="name">Name</label>
-        <input type="text" name="name" id="name" required>
+<body>
+    <form action="" method="post" class="form" id="register">
+        <h1> Register </h1>
+        <div class="form-data">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name">
+        </div>
+        <div class="form-data">
+            <label for="username">Userame</label>
+            <input type="text" name="username" id="username">
+        </div>
+        <div class="form-data">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email">
+        </div>
+        <div class="form-data">
+            <label for="password1">Password</label>
+            <input type="password" name="password1" id="password1">
+        </div>
+        <div class="form-data">
+            <label for="password2">Confirm Password</label>
+            <input type="password" name="password2" id="password2">
+        </div>
+        <button> Register </button>
+    </form>
+    <div>
+        <p>Already have an account? click here to <a href="/login"> Login </a> </p>
     </div>
-    <div class="form-data">
-        <label for="username">Userame</label>
-        <input type="text" name="username" id="username" required>
-    </div>
-    <div class="form-data">
-        <label for="email">Email</label>
-        <input type="email" name="email" id="email" required>
-    </div>
-    <div class="form-data">
-        <label for="password1">Password</label>
-        <input type="password" name="password1" id="password1" required>
-    </div>
-    <div class="form-data">
-        <label for="password2">Confirm Password</label>
-        <input type="password" name="password2" id="password2" required>
-    </div>
-    <button> Register </button>
-</form>
-<div>
-    <p>Already have an account? click here to <a href="/login"> Login </a> </p>
-</div>
+    <script src="/js/reglog.js"></script>
+</body>
