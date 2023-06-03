@@ -60,11 +60,11 @@ header{
     font-size: 1em;
 }
 .search > button{
-    padding: 8px 14px;
+    padding: 1px 10px;
     border: 1px solid white;
+    border-left: none;
     color: white;
     background-color: var(--main-color);
-    border-radius: 5px;
 }
 @media all and (width < 800px){
     .links{
