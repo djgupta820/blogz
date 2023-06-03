@@ -1,5 +1,40 @@
 <%- include('./partials/navbar') %>
+<link rel="stylesheet" href="/css/style.css">
+<title>Home</title>
 
-<div class="blogs">
-    <div class="main"></div>
+<div class="container">
+
+    <% if(message === 'success'){ %>
+        <% for(let blog of blogs){ %>
+            <div class="blog">
+                <div class="blog-top">
+                    <div class="blog-user">
+                        <img src="/images/user.png" alt="user-profile">
+                        <p><%= blog.user %></p>
+                    </div>
+                    <p> <%= blog.date_posted %> </p>
+                </div>
+                <div class="blog-data">
+                    <%= blog.text %>
+                </div>
+                <form action="/view-blog/<%= blog.id %>" method="get" class="blog-view">
+                    <button> View </button>
+                </form>
+            </div>
+    <% } }%>
+
+    <!-- <div class="blog">
+        <div class="blog-top">
+            <img src="" alt="poster-profile">
+            <p>date time posted</p>
+        </div>
+        <div class="blog-data">
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. 
+            Odit qui sit neque, numquam, alias quo nulla ipsa rem magnam 
+            molestias sunt mollitia dicta doloremque, fuga dolore facilis illo eum vel!
+        </div>
+        <form action="" method="get">
+            <button> View </button>
+        </form>
+    </div> -->
 </div>

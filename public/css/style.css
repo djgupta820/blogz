@@ -1,11 +1,11 @@
 :root{
     --main-color: rgb(44, 43, 43); 
+    --blog-color: steelblue;
 }
 .container{
     width: 90%;
     margin: auto;
     margin-top: 1em;
-    border: 1px solid black;
 }
 .form{
     width: 100%;
@@ -59,4 +59,79 @@
     text-align: center;
     background-color: rgb(139, 243, 139);
     font-size: 1.5em;
+}
+.blog{
+    width: 100%;
+    border: 0.1em solid var(--blog-color);
+    border-radius: 5px;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+.blog-top{
+    width: 100%;
+    border-bottom: 0.1em solid var(--blog-color);
+    padding: 0.2em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.blog-top div img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin: 0.2em;
+}
+.blog-top p{
+    font-size: 0.8em;
+    font-style: italic;
+}
+.blog-user{
+    display: flex;
+    align-items: center;
+}
+.blog-user > p{
+    font-size: 1em;
+    font-style: normal;
+    margin-left: 0.5em;
+    font-weight: bold;
+}
+.blog-data{
+    padding: 1em;
+    line-height: 1.5em;
+}
+.blog-view{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1em;
+}
+.blog-view > button{
+    height: 28px;
+    padding: 1px 10px;
+    border: 1px solid white;
+    border: none;
+    color: white;
+    background-color: var(--main-color);
+    box-shadow: 0.1em 0.1em 0.3em 0.1em var(--main-color);
+}
+.profile{
+    width: 100%;
+    display: flex;
+}
+.data{
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 2em;
+}
+.profile-links{
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+}
+.profile-links a{
+    color: blue;
+    text-decoration: underline;
 }

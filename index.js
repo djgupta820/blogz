@@ -106,8 +106,15 @@ app.use(cookieParser())
 
 // rendering the index
 app.get('/', (req, res) => {
-    res.render('index')
-    // if(req.cookies['userId']){
+    Blog.find({}).limit(10).then((msg)=>{
+        const message = 'success'
+        const blogs = msg
+        res.render('index', {blogs, message})
+    }).catch((err)=>{
+        message = "Nothing to show"
+        res.render('index', {message})
+    })
+    // if(req.cookies['userData']){
     //     res.render('index')
     // }else{
     //     res.redirect('/error')
@@ -122,12 +129,16 @@ app.get('/login', (req, res) => {
     res.render('login', { message: message, type: type })
 })
 
+// logging in user
 app.post('/login', (req, res) => {
     const { username, password } = req.body
     User.find({ $and: [{ username: username }, { password: password }] }).then((msg) => {
         if (msg.length > 0) {
-            const userId = msg[0].id
-            res.cookie('userId', userId)
+            const userData = {
+                username: msg[0].username,
+                userId: msg[0].id
+            }
+            res.cookie('userData', userData)
             res.redirect('/')
         } else {
             console.log('user not found')
@@ -136,6 +147,7 @@ app.post('/login', (req, res) => {
         console.log("error")
     })
 })
+
 // rendering registeration page
 app.get('/register', (req, res) => {
     res.render('register')
@@ -174,6 +186,7 @@ app.post('/register', (req, res) => {
     })
 })
 
+// rendering page for adding new blog
 app.get('/new-blog', (req, res) => {
     res.render('newBlog')
 })
@@ -181,11 +194,12 @@ app.get('/new-blog', (req, res) => {
 // Adding new blog to database
 app.post('/new-blog', (req, res) => {
     const { title, category, text } = req.body
+    const userData = req.cookies['userData']
     Blog.create({
         title: title,
         category: category,
         text: text,
-        user: "testuser",
+        user: userData.username,
         date_posted: getCurrentDateAndTime()
     }).then((msg)=>{
         res.redirect('/new-blog')
@@ -196,8 +210,16 @@ app.post('/new-blog', (req, res) => {
     })
 })
 
+// showing user profile
 app.get('/profile', (req, res) => {
-    res.render('profile')
+    const userData = req.cookies['userData']
+    User.find({username: userData.username}).then((msg)=>{
+        const message = 'success'
+        res.render('profile', {user: msg[0], message: message})
+    }).catch((err)=>{
+        const message = 'error'
+        res.render('profile', {message: message})
+    })
 })
 
 app.get('/logout', (req, res) => {
