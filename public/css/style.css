@@ -1,0 +1,62 @@
+:root{
+    --main-color: rgb(44, 43, 43); 
+}
+.container{
+    width: 90%;
+    margin: auto;
+    margin-top: 1em;
+    border: 1px solid black;
+}
+.form{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1em;
+    box-shadow: 0.1em 0.1em 1em 0.1em ;
+}
+.form-data{
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.5em;
+}
+.form-data label{
+    margin-bottom: 0.5em;
+    font-weight: bold;
+}
+.form-data > input, textarea{
+    padding: 0.3em;
+    font-size: 1em;
+    outline: none;
+    border: 0.1em solid var(--main-color);
+    color: var(--main-color);
+}
+.form-data textarea{
+    resize: none;
+}
+.form > button{
+    width: 150px ;
+    padding: 6px 0;
+    font-size: 1em;
+    font-weight: bold;
+    background-color: var(--main-color);
+    border: 0.1em solid var(--main-color);
+    color: white;
+    box-shadow: 0.1em 0.1em 1em 0.1em var(--main-color);
+    align-self: center;
+    letter-spacing: 0.3em;
+}
+.message-danger{
+    width: 100%;
+    padding: 0.8em;
+    text-align: center;
+    background-color: rgb(243, 141, 141);
+    font-size: 1.5em;
+}
+.message-success{
+    width: 100%;
+    padding: 0.5em;
+    text-align: center;
+    background-color: rgb(139, 243, 139);
+    font-size: 1.5em;
+}

@@ -1,0 +1,22 @@
+<%- include('./partials/navbar') %>
+<link rel="stylesheet" href="/css/style.css">
+<title> New Blog </title>
+
+<div class="container">
+    <form action="" method="post" class="form" id="blog">
+        <div class="form-data">
+            <label for="title">Title</label>
+            <input type="text" name="title" id="titile">
+        </div>
+        <div class="form-data">
+            <label for="category">Category</label>
+            <input type="text" name="category" id="category">
+        </div>
+        <div class="form-data">
+            <label for="text">Text</label>
+            <textarea name="text" id="text" cols="30" rows="10"></textarea>
+        </div>
+        <button> Post </button>
+    </form>
+</div>
+<script src="/js/main.js"></script>

@@ -14,13 +14,17 @@
             </div>
             <div class="links" id="links">
                 <label id="closeMenu"> <i class="fa fa-times"></i> </label>
-                <a href="#">Home</a>
-                <a href="#">Blogs</a>
-                <form action="" method="get" class="search">
-                    <input type="search" name="q" id="q">
-                    <button> <i class="fa fa-search"></i> </button>
-                </form>
+                <a href="/">Home</a>
+                <a href="/new-blog">New Blogs</a>
+                <a href="/profile">Profile</a>
+                <p id="srch">search</p>
+                <a href="/logout"> Logout </a>
             </div>
+            <form action="" method="get" class="search" id="search">
+                <label class="fa fa-times" id="fclose"></label>
+                <input type="search" name="q" id="q">
+                <button> <i class="fa fa-search"></i> </button>
+            </form>
             <label id="openMenu"> <i class="fa fa-bars"></i> </label>
         </nav>
     </header>

@@ -40,6 +40,9 @@ header{
     align-items: center;
     justify-content: space-around;
 }
+#srch{
+    cursor: pointer;
+}
 #openMenu, #closeMenu{
     font-size: 2em;
     display: none;
@@ -51,7 +54,25 @@ header{
     top: 1em;
 }
 .search{
+    padding: 1em;
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 350px;
+    height: 100px;
+    background-color: var(--main-color);
+    position: absolute;
+    top: 4em;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: none;
+}
+#fclose{
+    position: absolute;
+    right: 10px;
+    top: 10px;
 }
 .search > input{
     width: 100%;
@@ -60,6 +81,7 @@ header{
     font-size: 1em;
 }
 .search > button{
+    height: 28px;
     padding: 1px 10px;
     border: 1px solid white;
     border-left: none;

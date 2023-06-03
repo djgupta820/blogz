@@ -2,6 +2,11 @@
 <title> Login </title>
 
 <body>
+    <% if (message !== '') { %>
+        <div class="message-<%= type %>">
+            <%= message %>
+        </div>
+    <% } %>
     <form action="" method="post" class="form" id="login">
         <h1>Login</h1>
         <div class="form-data">
