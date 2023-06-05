@@ -27,8 +27,8 @@ app.use(cookieParser())
 
 // for unauthenticated users
 
-app.get('/unAuth', (req, res) => {
-    Blog.find({}).limit(10).then((msg) => {
+app.get('/unAuth', async (req, res) => {
+    await Blog.find({}).limit(10).then((msg) => {
         const message = 'success'
         const blogs = msg
         res.render('./unauth/index', { blogs, message })
@@ -38,18 +38,18 @@ app.get('/unAuth', (req, res) => {
     })
 })
 
-app.get('/unauth-search', (req, res) => {
+app.get('/unauth-search', async (req, res) => {
     const { q } = req.query
-    Blog.find({ text: { $regex: `(?i)${q}*` } }).then((msg) => {
+    await Blog.find({ text: { $regex: `(?i)${q}*` } }).then((msg) => {
         res.render('./unauth/search', { msg, q })
     }).catch((err) => {
         console.log(err)
     })
 })
 
-app.get('/unauth-view/:blogId', (req, res) => {
+app.get('/unauth-view/:blogId', async (req, res) => {
     const { blogId } = req.params
-    Blog.find({ blogId: blogId }).then((msg) => {
+    await Blog.find({ blogId: blogId }).then((msg) => {
         const blog = msg[0]
         const message = 'success'
         res.render('./unauth/viewBlog', { blog, message })
@@ -60,9 +60,9 @@ app.get('/unauth-view/:blogId', (req, res) => {
     })
 })
 // rendering the index
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
     if (req.cookies['userData']) {
-        Blog.find({}).limit(10).then((msg) => {
+        await Blog.find({}).limit(10).then((msg) => {
             const message = 'success'
             const blogs = msg
             res.render('index', { blogs, message })
@@ -84,12 +84,12 @@ app.get('/login', (req, res) => {
 })
 
 // logging in user
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
     const { username, password } = req.body
     let algo = 'sha256'
     let key = password
     let hash = crypto.createHash(algo).update(key).digest('hex')
-    User.find({ $and: [{ username: username }, { password: hash }] }).then((msg) => {
+    await User.find({ $and: [{ username: username }, { password: hash }] }).then((msg) => {
         if (msg.length > 0) {
             const userData = {
                 username: msg[0].username,
@@ -114,17 +114,15 @@ app.get('/register', (req, res) => {
 
 // console.log(crypto.createHash('sha256').update('ravan123').digest('hex'))
 // registering the user
-app.post('/register', (req, res) => {
-
+app.post('/register', async (req, res) => {
     const { name, username, email, password1 } = req.body
-
     // encrypting password
     let algo = 'sha256'
     let key = password1
     let hash = crypto.createHash(algo).update(key).digest('hex')
 
     // inserting the user in databse
-    User.create({
+    await User.create({
         userId: uuidv4(),
         name: name,
         username: username,
@@ -156,11 +154,11 @@ app.get('/new-blog', (req, res) => {
 })
 
 // Adding new blog to database
-app.post('/new-blog', (req, res) => {
+app.post('/new-blog', async (req, res) => {
     if (req.cookies['userData']) {
         const { title, category, text } = req.body
         const userData = req.cookies['userData']
-        Blog.create({
+        await Blog.create({
             blogId: uuidv4(),
             title: title,
             category: category,
@@ -178,10 +176,10 @@ app.post('/new-blog', (req, res) => {
 })
 
 // viewing full blog
-app.get('/view-blog/:blogId', (req, res) => {
+app.get('/view-blog/:blogId', async (req, res) => {
     if (req.cookies['userData']) {
         const { blogId } = req.params
-        Blog.find({ blogId: blogId }).then((msg) => {
+        await Blog.find({ blogId: blogId }).then((msg) => {
             const blog = msg[0]
             const message = 'success'
             res.render('viewBlog', { blog, message })
@@ -196,10 +194,10 @@ app.get('/view-blog/:blogId', (req, res) => {
 })
 
 // showing user profile
-app.get('/profile', (req, res) => {
+app.get('/profile', async (req, res) => {
     if (req.cookies['userData']) {
         const userData = req.cookies['userData']
-        User.find({ username: userData.username }).then((msg) => {
+        await User.find({ username: userData.username }).then((msg) => {
             const message = 'success'
             res.render('profile', { user: msg[0], message: message })
         }).catch((err) => {
@@ -212,10 +210,10 @@ app.get('/profile', (req, res) => {
 })
 
 // showing all blogs of logged in user
-app.get('/all-blogs', (req, res) => {
+app.get('/all-blogs', async (req, res) => {
     if (req.cookies['userData']) {
         const userData = req.cookies['userData']
-        Blog.find({ user: userData.username }).then((msg) => {
+        await Blog.find({ user: userData.username }).then((msg) => {
             res.render('allBlogs', { blogs: msg })
         }).catch((err) => {
             console.log(err)
@@ -235,14 +233,14 @@ app.get('/change-password', (req, res) => {
 })
 
 // changing password
-app.post('/change-password', (req, res) => {
+app.post('/change-password', async (req, res) => {
     if (req.cookies['userData']) {
         const user = req.cookies['userData']
         const { password } = req.body
         let algo = 'sha256'
         let key = password
         let hash = crypto.createHash(algo).update(key).digest('hex')
-        User.updateOne({ userId: user.userId }, { $set: { password: hash } }).then((msg) => {
+        await User.updateOne({ userId: user.userId }, { $set: { password: hash } }).then((msg) => {
             res.redirect('/profile')
         }).cathc((err) => {
             console.log(err)
@@ -253,10 +251,10 @@ app.post('/change-password', (req, res) => {
 })
 
 // showing results for search
-app.get('/result', (req, res) => {
+app.get('/result', async (req, res) => {
     if (req.cookies['userData']) {
         const { q } = req.query
-        Blog.find({ text: { $regex: `(?i)${q}*` } }).then((msg) => {
+        await Blog.find({ text: { $regex: `(?i)${q}*` } }).then((msg) => {
             res.render('searchResults', { msg, q })
         }).catch((err) => {
             console.log(err)
