@@ -1,0 +1,31 @@
+<!-- <div class="container">
+        <% if (message === 'success' ) { %>
+            <div class="blog">
+                <div class="blog-top">
+                    <div class="blog-user">
+                        <img src="/images/user.png" alt="user-profile">
+                        <p>
+                            <%= blog.user %>
+                        </p>
+                    </div>
+                    <p>
+                        <%= blog.date_posted %>
+                    </p>
+                </div>
+                <div class="blog-data" style="overflow: visible;">
+                    <h4>
+                        <%= blog.title %>
+                    </h4>
+                    <%= blog.text %>
+                </div>
+                <form action="/view-blog/<%= blog.id %>" method="get" class="blog-view">
+                    <button> View </button>
+                </form>
+            </div>
+        <% } else {%>
+            <div class="message-danger">
+                <h1> Error showing Blog! </h1>
+                <p> Please try after some time. </p>
+            </div> 
+        <% } %>
+    </div> -->

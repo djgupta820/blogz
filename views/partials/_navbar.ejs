@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/navbar.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <p>Blogz</p>
+            </div>
+            <div class="links" id="links">
+                <label id="closeMenu"> <i class="fa fa-times"></i> </label>
+                <a href="/">Home</a>
+                <p id="srch">search</p>
+                <a href="/login">Login</a>
+                <a href="/register">Register</a>
+            </div>
+            <form action="/result" method="get" class="search" id="search">
+                <label class="fa fa-times" id="fclose"></label>
+                <input type="search" name="q" id="q" required>
+                <button> <i class="fa fa-search"></i> </button>
+            </form>
+            <label id="openMenu"> <i class="fa fa-bars"></i> </label>
+        </nav>
+    </header>
+    <script src="https://kit.fontawesome.com/797817b03b.js" crossorigin="anonymous"></script>
+    <script src="/js/script.js"></script>
+</body>
+</html>

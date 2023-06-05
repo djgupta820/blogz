@@ -1,0 +1,35 @@
+<%- include('./partials/navbar') %>
+<link rel="stylesheet" href="/css/style.css">
+<title> results - <%= q %></title>
+
+<% if(msg.length > 0) { %>
+<div class="container">
+    <h3 style="color: var(--bg-color);">Showing results for: <%= q %></h3>
+    <div class="all-blogs">
+        <% for(let result of msg) { %>
+            <div class="blog">
+                <div class="blog-top">
+                    <div class="blog-user">
+                        <img src="/images/user.png" alt="user-profile">
+                        <p> <%= result.user %> </p>
+                    </div>
+                    <p> <%= result.date_posted %> </p>
+                </div>
+                <div class="blog-data">
+                    <h4> <%= result.title %> <i style="color:steelblue; font-size: 0.8em;"> (<%= result.category %>) </i> </h4>
+                    <%= result.text %>
+                </div>
+                <form action="/view-blog/<%= result.blogId %>" method="get" class="blog-view">
+                    <button> View </button>
+                </form>
+            </div>    
+        <% } %>
+    </div>
+</div>
+<% } else { %>
+    <div class="container">
+        <div class="message-danger">
+            <h3>Nothing to show for: <%= q %></h3>
+        </div>
+    </div>
+<% } %>

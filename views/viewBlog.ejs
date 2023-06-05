@@ -1,0 +1,24 @@
+<%- include('./partials/navbar') %>
+    <link rel="stylesheet" href="/css/style.css">
+    <title> Blog - <%= blog.title %>
+    </title>
+
+    <div class="container">
+        <% if (message==='success' ) { %>
+
+            <div class="full-post">
+                <h3>Author: <i style="color: steelblue;"> <%= blog.user %> </i> </h3>
+                <p>Posted on <i style="color: steelblue;"> <%= blog.date_posted%> </i> </p>
+                <div class="post">
+                    <h1> <%= blog.title %> </h1><br>
+                    <h4 style="color: steelblue;">Category: <%= blog.category %></h4><br>
+                    <p> <%= blog.text %> </p>
+                </div>
+            </div>
+            <% } else {%>
+                <div class="message-danger">
+                    <h1> Error showing Blog! </h1>
+                    <p> Please try after some time. </p>
+                </div>
+            <% } %>
+    </div>
