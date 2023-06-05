@@ -1,0 +1,33 @@
+<%- include('../partials/_navbar') %>
+<link rel="stylesheet" href="/css/style.css">
+<title>Home</title>
+
+<div class="container">
+    <div class="all-blogs">
+        <% if(message==='success' ){ %>
+            <% for(let blog of blogs){ %>
+                <div class="blog">
+                    <div class="blog-top">
+                        <div class="blog-user">
+                            <img src="/images/user.png" alt="user-profile">
+                            <p>
+                                <%= blog.user %>
+                            </p>
+                        </div>
+                        <p>
+                            <%= blog.date_posted %>
+                        </p>
+                    </div>
+                    <div class="blog-data">
+                        <h4>
+                            <%= blog.title %> <i style="color:steelblue; font-size: 0.8em;"> (<%= blog.category %>) </i>
+                        </h4>
+                        <%= blog.text %>
+                    </div>
+                    <form action="/view-blog/<%= blog.blogId %>" method="get" class="blog-view">
+                        <button> View </button>
+                    </form>
+                </div>
+        <% } }%>
+    </div>
+</div>

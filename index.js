@@ -25,19 +25,53 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cookieParser())
 
+// for unauthenticated users
+
+app.get('/unAuth', (req, res) => {
+    Blog.find({}).limit(10).then((msg) => {
+        const message = 'success'
+        const blogs = msg
+        res.render('./unauth/index', { blogs, message })
+    }).catch((err) => {
+        message = "Nothing to show"
+        res.render('index', { message })
+    })
+})
+
+app.get('/unauth-search', (req, res) => {
+    const { q } = req.query
+    Blog.find({ text: { $regex: `(?i)${q}*` } }).then((msg) => {
+        res.render('./unauth/search', { msg, q })
+    }).catch((err) => {
+        console.log(err)
+    })
+})
+
+app.get('/unauth-view/:blogId', (req, res) => {
+    const { blogId } = req.params
+    Blog.find({ blogId: blogId }).then((msg) => {
+        const blog = msg[0]
+        const message = 'success'
+        res.render('./unauth/viewBlog', { blog, message })
+    }).catch((err) => {
+        const message = 'danger'
+        console.log(err)
+        res.render('viewBlog', { message: message })
+    })
+})
 // rendering the index
 app.get('/', (req, res) => {
-    if(req.cookies['userData']){
+    if (req.cookies['userData']) {
         Blog.find({}).limit(10).then((msg) => {
             const message = 'success'
             const blogs = msg
-            res.render('index', { blogs, message})
+            res.render('index', { blogs, message })
         }).catch((err) => {
             message = "Nothing to show"
             res.render('index', { message })
-        })        
-    }else{
-        res.redirect('/error')
+        })
+    } else {
+        res.redirect('/unAuth')
     }
 })
 
@@ -46,7 +80,7 @@ app.get('/login', (req, res) => {
     const message = ''
     const type = ''
     const cookie = true
-    res.render('login', { message: message, type: type, cookie: cookie})
+    res.render('login', { message: message, type: type, cookie: cookie })
 })
 
 // logging in user
@@ -114,16 +148,16 @@ app.post('/register', (req, res) => {
 
 // rendering page for adding new blog
 app.get('/new-blog', (req, res) => {
-    if(req.cookies['userData']){
+    if (req.cookies['userData']) {
         res.render('newBlog')
-    }else{
+    } else {
         res.redirect('/error')
     }
 })
 
 // Adding new blog to database
 app.post('/new-blog', (req, res) => {
-    if(req.cookies['userData']){
+    if (req.cookies['userData']) {
         const { title, category, text } = req.body
         const userData = req.cookies['userData']
         Blog.create({
@@ -138,32 +172,32 @@ app.post('/new-blog', (req, res) => {
         }).catch((err) => {
             res.redirect('/new-blog')
         })
-    }else{
+    } else {
         res.redirect('/error')
     }
 })
 
 // viewing full blog
 app.get('/view-blog/:blogId', (req, res) => {
-    if(req.cookies['userData']){
+    if (req.cookies['userData']) {
         const { blogId } = req.params
         Blog.find({ blogId: blogId }).then((msg) => {
             const blog = msg[0]
             const message = 'success'
-            res.render('viewBlog', { blog, message})
+            res.render('viewBlog', { blog, message })
         }).catch((err) => {
             const message = 'danger'
             console.log(err)
-            res.render('viewBlog', { message: message})
+            res.render('viewBlog', { message: message })
         })
-    }else{
+    } else {
         res.redirect('/error')
     }
 })
 
 // showing user profile
 app.get('/profile', (req, res) => {
-    if(req.cookies['userData']){
+    if (req.cookies['userData']) {
         const userData = req.cookies['userData']
         User.find({ username: userData.username }).then((msg) => {
             const message = 'success'
@@ -172,72 +206,72 @@ app.get('/profile', (req, res) => {
             const message = 'error'
             res.render('profile', { message: message })
         })
-    }else{
+    } else {
         res.redirect('/error')
     }
 })
 
 // showing all blogs of logged in user
 app.get('/all-blogs', (req, res) => {
-    if(req.cookies['userData']){
+    if (req.cookies['userData']) {
         const userData = req.cookies['userData']
         Blog.find({ user: userData.username }).then((msg) => {
             res.render('allBlogs', { blogs: msg })
         }).catch((err) => {
             console.log(err)
         })
-    }else{
+    } else {
         res.redirect('/error')
     }
 })
 
 // rendering change password page
 app.get('/change-password', (req, res) => {
-    if(req.cookies['userData']){
+    if (req.cookies['userData']) {
         res.render('changePassword')
-    }else{
+    } else {
         res.redirect('/error')
     }
 })
 
 // changing password
 app.post('/change-password', (req, res) => {
-    if(req.cookies['userData']){
+    if (req.cookies['userData']) {
         const user = req.cookies['userData']
-        const {password} = req.body
+        const { password } = req.body
         let algo = 'sha256'
         let key = password
         let hash = crypto.createHash(algo).update(key).digest('hex')
-        User.updateOne({ userId: user.userId }, {$set: {password: hash}}).then((msg) => {
+        User.updateOne({ userId: user.userId }, { $set: { password: hash } }).then((msg) => {
             res.redirect('/profile')
-        }).cathc((err)=>{
+        }).cathc((err) => {
             console.log(err)
         })
-    }else{
+    } else {
         res.redirect('/error')
     }
 })
 
 // showing results for search
-app.get('/result', (req,res)=>{
-    if(req.cookies['userData']){
-        const {q} = req.query
-        Blog.find({text: {$regex: `(?i)${q}*`}}).then((msg)=>{
-            res.render('searchResults', {msg, q})
-        }).catch((err)=>{
+app.get('/result', (req, res) => {
+    if (req.cookies['userData']) {
+        const { q } = req.query
+        Blog.find({ text: { $regex: `(?i)${q}*` } }).then((msg) => {
+            res.render('searchResults', { msg, q })
+        }).catch((err) => {
             console.log(err)
         })
-    }else{
+    } else {
         res.redirect('/error')
     }
 })
 
 // logging user out
 app.get('/logout', (req, res) => {
-    if(req.cookies['userData']){
+    if (req.cookies['userData']) {
         res.clearCookie('userData')
         res.render('logout')
-    }else{
+    } else {
         res.redirect('/error')
     }
 })
