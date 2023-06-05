@@ -66,3 +66,19 @@ body{
     background-color: rgb(139, 243, 139);
     font-size: 1.5em;
 }
+.ball{
+    width: 250px;
+    height: 250px;
+    border: 1px solid green;
+    border-radius: 50%;
+    background: linear-gradient(to top, rgb(2, 61, 2), rgb(3, 92, 3), rgb(3, 165, 3), rgb(4, 247, 4));
+    position: absolute;
+    bottom: 0;
+    animation: bounce 3s linear infinite;
+    z-index: -1;
+}
+@keyframes bounce{
+    50%{
+        transform:translateY(-400px)
+    }
+}
