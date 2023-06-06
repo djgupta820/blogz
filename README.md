@@ -19,6 +19,6 @@ A simple blogging/markdown web application
 </ul>
 
 ### steps
--> clone the application (git clone https://github.com/djgupta820/blogz.git)
--> goto the folder where it is cloned ( &lt;project_dir&gt;/blogz)
--> fire command *nodemon index.js*
+-> clone the application (git clone https://github.com/djgupta820/blogz.git) <br>
+-> goto the folder where it is cloned ( &lt;project_dir&gt;/blogz) <br>
+-> fire command *nodemon index.js* <br>
