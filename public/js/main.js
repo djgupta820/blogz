@@ -38,8 +38,8 @@ if(blog){
 if(cform){
     cform.addEventListener('submit', (e)=>{
         e.preventDefault()
-        const p1 = cform['password1']
-        const p2 = cform['password2']
+        const p1 = cform['password1'].value
+        const p2 = cform['password2'].value
         console.log(p1, p2)
         if(p1.lenght == 0){
             createMessage('please enter new password ', cform, 'danger')

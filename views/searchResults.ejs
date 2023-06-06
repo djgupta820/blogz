@@ -17,7 +17,7 @@
                 </div>
                 <div class="blog-data">
                     <h4> <%= result.title %> <i style="color:steelblue; font-size: 0.8em;"> (<%= result.category %>) </i> </h4>
-                    <%= result.text %>
+                    <%- result.marked %>
                 </div>
                 <form action="/view-blog/<%= result.blogId %>" method="get" class="blog-view">
                     <button> View </button>

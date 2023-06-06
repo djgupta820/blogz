@@ -7,10 +7,10 @@ const Blog = require('./model/Blog')
 const User = require('./model/User')
 const extras = require('./extras')
 const { v4: uuidv4 } = require('uuid')
-// const createDomPurify = require('dompurify')
-// const {JSDOM} = require('jsdom')
-// const marked = require('marked')
-// const dompurify = createDomPurify(new JSDOM().window)
+const createDomPurify = require('dompurify')
+const {JSDOM} = require('jsdom')
+const {marked} = require('marked')
+const dompurify = createDomPurify(new JSDOM().window)
 const app = express()
 
 /* ------------------------#    Database Configurations    #----------------------------- */
@@ -30,7 +30,7 @@ app.use(express.json())
 app.use(cookieParser())
 
 // for unauthenticated users
-
+// rendering index page for unauthenticated users
 app.get('/unAuth', async (req, res) => {
     await Blog.find({}).limit(10).then((msg) => {
         const message = 'success'
@@ -42,6 +42,7 @@ app.get('/unAuth', async (req, res) => {
     })
 })
 
+// rendering search for unauthenticated users
 app.get('/unauth-search', async (req, res) => {
     const { q } = req.query
     await Blog.find({ text: { $regex: `(?i)${q}*` } }).then((msg) => {
@@ -51,6 +52,7 @@ app.get('/unauth-search', async (req, res) => {
     })
 })
 
+// rendering view page for unauthenticated users
 app.get('/unauth-view/:blogId', async (req, res) => {
     const { blogId } = req.params
     await Blog.find({ blogId: blogId }).then((msg) => {
@@ -63,6 +65,8 @@ app.get('/unauth-view/:blogId', async (req, res) => {
         res.render('viewBlog', { message: message })
     })
 })
+
+// for authenticated users
 // rendering the index
 app.get('/', async (req, res) => {
     if (req.cookies['userData']) {
@@ -163,13 +167,13 @@ app.post('/new-blog', async (req, res) => {
         console.log('new blog function called...')
         const { title, category, text } = req.body
         const userData = req.cookies['userData']
-        // const markedHtml = dompurify.sanitize(marked(text))
-        // sanitizedHtml: markedHtml,
+        const markedHtml = dompurify.sanitize(marked.parse(text))
         await Blog.create({
             blogId: uuidv4(),
             title: title,
             category: category,
             text: text,
+            marked: markedHtml,
             user: userData.username,
             date_posted: extras.getCurrentDateAndTime()
         })
@@ -248,7 +252,8 @@ app.post('/edit/:blogId', async (req,res)=>{
     if(req.cookies['userData']){
         const {id, title, category, text} = req.body
         console.log(id, title, category, text)
-        await Blog.updateOne({blogId: id}, {$set: {title: title, category: category, text: text}}).then((msg)=>{
+        const markedHtml = dompurify.sanitize(marked.parse(text))
+        await Blog.updateOne({blogId: id}, {$set: {title: title, category: category, text: text, marked: markedHtml}}).then((msg)=>{
             console.log("blog edit success")
             res.redirect('/all-blogs')
         }).catch((err)=>{
@@ -258,6 +263,16 @@ app.post('/edit/:blogId', async (req,res)=>{
     }else{
         res.redirect('/error')
     }
+})
+
+app.post('/delete/:blogId', async (req,res)=>{
+    const {blogId} = req.params
+    await Blog.deleteOne({blogId: blogId}).then((msg)=>{
+        console.log('delete successful')
+        res.redirect('/all-blogs')
+    }).catch((err)=>{
+        console.log('delete unsuccessful')
+    })
 })
 
 // rendering change password page
@@ -273,13 +288,14 @@ app.get('/change-password', (req, res) => {
 app.post('/change-password', async (req, res) => {
     if (req.cookies['userData']) {
         const user = req.cookies['userData']
-        const { password } = req.body
+        const { password1 } = req.body
         let algo = 'sha256'
-        let key = password
+        let key = password1
         let hash = crypto.createHash(algo).update(key).digest('hex')
+        console.log(user)
         await User.updateOne({ userId: user.userId }, { $set: { password: hash } }).then((msg) => {
             res.redirect('/profile')
-        }).cathc((err) => {
+        }).catch((err) => {
             console.log(err)
         })
     } else {

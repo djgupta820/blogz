@@ -18,10 +18,6 @@ const BlogSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    text: {
-        type: String,
-        required: true
-    },
     user: {
         type: String,
         required: true
@@ -30,14 +26,15 @@ const BlogSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    text: {
+        type: String,
+        required: true
+    },
+    marked: {
+        type: String,
+        required: true
+    }
 })
 
-// BlogSchema.pre('validate', (next)=>{
-//     if(this.text){
-//         this.text = dompurify.sanitize(marked(this.markdown))
-//     }
-// })
-
 const Blog = new mongoose.model('Blog', BlogSchema)
-
 module.exports = Blog
