@@ -1,4 +1,8 @@
 const mongoose = require('mongoose')
+const createDomPurify = require('dompurify')
+const {JSDOM} = require('jsdom')
+const marked = require('marked')
+const dompurify = createDomPurify(new JSDOM().window)
 
 // Blog Schema for operations related to blogs
 const BlogSchema = new mongoose.Schema({
@@ -27,6 +31,12 @@ const BlogSchema = new mongoose.Schema({
         required: true
     },
 })
+
+// BlogSchema.pre('validate', (next)=>{
+//     if(this.text){
+//         this.text = dompurify.sanitize(marked(this.markdown))
+//     }
+// })
 
 const Blog = new mongoose.model('Blog', BlogSchema)
 

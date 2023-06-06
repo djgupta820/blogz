@@ -7,6 +7,10 @@ const Blog = require('./model/Blog')
 const User = require('./model/User')
 const extras = require('./extras')
 const { v4: uuidv4 } = require('uuid')
+// const createDomPurify = require('dompurify')
+// const {JSDOM} = require('jsdom')
+// const marked = require('marked')
+// const dompurify = createDomPurify(new JSDOM().window)
 const app = express()
 
 /* ------------------------#    Database Configurations    #----------------------------- */
@@ -156,8 +160,11 @@ app.get('/new-blog', (req, res) => {
 // Adding new blog to database
 app.post('/new-blog', async (req, res) => {
     if (req.cookies['userData']) {
+        console.log('new blog function called...')
         const { title, category, text } = req.body
         const userData = req.cookies['userData']
+        // const markedHtml = dompurify.sanitize(marked(text))
+        // sanitizedHtml: markedHtml,
         await Blog.create({
             blogId: uuidv4(),
             title: title,
@@ -165,7 +172,8 @@ app.post('/new-blog', async (req, res) => {
             text: text,
             user: userData.username,
             date_posted: extras.getCurrentDateAndTime()
-        }).then((msg) => {
+        })
+        .then((msg) => {
             res.redirect('/')
         }).catch((err) => {
             res.redirect('/new-blog')
@@ -214,11 +222,40 @@ app.get('/all-blogs', async (req, res) => {
     if (req.cookies['userData']) {
         const userData = req.cookies['userData']
         await Blog.find({ user: userData.username }).then((msg) => {
-            res.render('allBlogs', { blogs: msg })
+            res.render('allBlogs', { blogs: msg, profile:true })
         }).catch((err) => {
             console.log(err)
         })
     } else {
+        res.redirect('/error')
+    }
+})
+
+app.get('/edit/:blogId', async (req,res)=>{
+    if(req.cookies['userData']){
+        const {blogId} = req.params
+        await Blog.find({ blogId: blogId }).then((msg) => {
+            res.render('edit', { blog: msg[0]})
+        }).catch((err) => {
+            console.log(err)
+        })
+    }else{
+        res.redirect('/error')
+    }
+})
+
+app.post('/edit/:blogId', async (req,res)=>{
+    if(req.cookies['userData']){
+        const {id, title, category, text} = req.body
+        console.log(id, title, category, text)
+        await Blog.updateOne({blogId: id}, {$set: {title: title, category: category, text: text}}).then((msg)=>{
+            console.log("blog edit success")
+            res.redirect('/all-blogs')
+        }).catch((err)=>{
+            console.log("blog edit failed", err)
+            res.redirect('/all-blogs')
+        })
+    }else{
         res.redirect('/error')
     }
 })

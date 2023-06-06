@@ -4,6 +4,11 @@
 
 <div class="container">
     <div class="all-blogs">
+        <% if(blogs.length == 0) {%>
+            <div class="message-danger">
+                <h1>no posts yet :(</h1>
+            </div>
+        <% } %>
         <% for(let blog of blogs){ %>
             <div class="blog">
                 <div class="blog-top">
@@ -18,6 +23,8 @@
                     <%= blog.text %>
                 </div>
                 <form action="/view-blog/<%= blog.blogId %>" method="get" class="blog-view">
+                    <a href="/edit/<%= blog.blogId %>" class="btn-success">Edit</a>
+                    <a href="#" class="btn-danger">Delete</a>
                     <button> View </button>
                 </form>
             </div>    
