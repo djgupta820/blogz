@@ -28,6 +28,7 @@ A simple blogging/markdown web application
             <li> Login </li>
             <li> View Home Page (All Blogs) (Index Page)</li>
             <li> view Varticular Blog </li>
+            <li> Add New Blog </li>
             <li> Edit Blog </li>
             <li> Delete Blog </li>
             <li> Search Blog </li>
