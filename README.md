@@ -1,4 +1,4 @@
-# Blogz
+# <font color="green"> Blogz </font>
 A simple blogging/markdown web application 
 
 ### Technologies used
