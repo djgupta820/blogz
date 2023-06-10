@@ -94,8 +94,6 @@ app.get('/', async (req, res) => {
 
 // rendering login page
 app.get('/login', (req, res) => {
-    req.message = ''
-    const type = ''
     res.render('login', { message: req.flash('message'), type: req.flash('type')})
 })
 
