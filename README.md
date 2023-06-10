@@ -35,6 +35,7 @@ A simple blogging/markdown web application
         </ul>
     </li>
 </ul>
+
 ## To run the application
 
 ### requirements
