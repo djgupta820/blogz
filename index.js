@@ -11,6 +11,8 @@ const createDomPurify = require('dompurify')
 const {JSDOM} = require('jsdom')
 const {marked} = require('marked')
 const dompurify = createDomPurify(new JSDOM().window)
+const flash = require('connect-flash')
+const session = require('express-session')
 const app = express()
 
 /* ------------------------#    Database Configurations    #----------------------------- */
@@ -22,12 +24,19 @@ mongoose.connect('mongodb://127.0.0.1:27017/blogz').then((msg) => {
 })
 /*--------------------------------------------------------------------------------------- */
 
+
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cookieParser())
+app.use(session({
+    secret:'flashblog',
+    saveUninitialized: true,
+    resave: true
+}))
+app.use(flash())
 
 // for unauthenticated users
 // rendering index page for unauthenticated users
@@ -85,10 +94,9 @@ app.get('/', async (req, res) => {
 
 // rendering login page
 app.get('/login', (req, res) => {
-    const message = ''
+    req.message = ''
     const type = ''
-    const cookie = true
-    res.render('login', { message: message, type: type, cookie: cookie })
+    res.render('login', { message: req.flash('message'), type: req.flash('type')})
 })
 
 // logging in user
@@ -107,8 +115,9 @@ app.post('/login', async (req, res) => {
             res.cookie('userData', userData)
             res.redirect('/')
         } else {
+            req.flash('message', 'Invalid username or password!')
+            req.flash('type', 'danger')
             res.redirect('/login')
-            console.log('user not found')
         }
     }).catch((err) => {
         console.log("error")
@@ -117,10 +126,9 @@ app.post('/login', async (req, res) => {
 
 // rendering registeration page
 app.get('/register', (req, res) => {
-    res.render('register')
+    res.render('register', {message: req.flash('message'), type: req.flash('type')})
 })
 
-// console.log(crypto.createHash('sha256').update('ravan123').digest('hex'))
 // registering the user
 app.post('/register', async (req, res) => {
     const { name, username, email, password1 } = req.body
@@ -139,23 +147,21 @@ app.post('/register', async (req, res) => {
         join_date: extras.getCurrentDateAndTime()
     }).then((msg) => {
         // success
-        const message = "Registration successfull! Please login to continue."
-        const type = 'success'
+        req.flash('message', 'Registration successfull! Please login to continue.')
+        req.flash('type', 'success')
         res.redirect('/login')
-        res.render('login', { message: message, type: type })
     }).catch((err) => {
         // error
         const message = "Registration unsuccessfull! Please try again."
         const type = 'danger'
-        res.render('login', { message: message, type: type })
-        console.log(err)
+        req.redirect('/register')
     })
 })
 
 // rendering page for adding new blog
 app.get('/new-blog', (req, res) => {
     if (req.cookies['userData']) {
-        res.render('newBlog')
+        res.render('newBlog', {message: req.flash('message'), type: req.flash('type')})
     } else {
         res.redirect('/error')
     }
@@ -164,7 +170,6 @@ app.get('/new-blog', (req, res) => {
 // Adding new blog to database
 app.post('/new-blog', async (req, res) => {
     if (req.cookies['userData']) {
-        console.log('new blog function called...')
         const { title, category, text } = req.body
         const userData = req.cookies['userData']
         const markedHtml = dompurify.sanitize(marked.parse(text))
@@ -178,8 +183,12 @@ app.post('/new-blog', async (req, res) => {
             date_posted: extras.getCurrentDateAndTime()
         })
         .then((msg) => {
-            res.redirect('/')
+            req.flash('message', 'Blog added successfully')
+            req.flash('type', 'success')
+            res.redirect('/new-blog')
         }).catch((err) => {
+            req.flash('message', 'Oops! Something went wrong...')
+            req.flash('type', 'danger')
             res.redirect('/new-blog')
         })
     } else {
@@ -197,7 +206,6 @@ app.get('/view-blog/:blogId', async (req, res) => {
             res.render('viewBlog', { blog, message })
         }).catch((err) => {
             const message = 'danger'
-            console.log(err)
             res.render('viewBlog', { message: message })
         })
     } else {
@@ -226,7 +234,7 @@ app.get('/all-blogs', async (req, res) => {
     if (req.cookies['userData']) {
         const userData = req.cookies['userData']
         await Blog.find({ user: userData.username }).then((msg) => {
-            res.render('allBlogs', { blogs: msg, profile:true })
+            res.render('allBlogs', { blogs: msg, message: req.flash('message'), type: req.flash('type')})
         }).catch((err) => {
             console.log(err)
         })
@@ -251,14 +259,15 @@ app.get('/edit/:blogId', async (req,res)=>{
 app.post('/edit/:blogId', async (req,res)=>{
     if(req.cookies['userData']){
         const {id, title, category, text} = req.body
-        console.log(id, title, category, text)
         const markedHtml = dompurify.sanitize(marked.parse(text))
         await Blog.updateOne({blogId: id}, {$set: {title: title, category: category, text: text, marked: markedHtml}}).then((msg)=>{
-            console.log("blog edit success")
+            req.flash('message', 'Blog updated Successfully!')
+            req.flash('type', 'success')
             res.redirect('/all-blogs')
         }).catch((err)=>{
-            console.log("blog edit failed", err)
-            res.redirect('/all-blogs')
+            req.flash('message', 'Oops! something went wrong...')
+            req.flash('type', 'danger')
+            res.redirect('/edit/:blogId')
         })
     }else{
         res.redirect('/error')
@@ -268,17 +277,20 @@ app.post('/edit/:blogId', async (req,res)=>{
 app.post('/delete/:blogId', async (req,res)=>{
     const {blogId} = req.params
     await Blog.deleteOne({blogId: blogId}).then((msg)=>{
-        console.log('delete successful')
+        req.flash('message', 'Blog deleted successfully!')
+        req.flash('type', 'success')
         res.redirect('/all-blogs')
     }).catch((err)=>{
-        console.log('delete unsuccessful')
+        req.flash('message', 'Oops! Something went wrong...')
+        req.flash('type', 'danger')
+        res.redirect('/all-blogs')
     })
 })
 
 // rendering change password page
 app.get('/change-password', (req, res) => {
     if (req.cookies['userData']) {
-        res.render('changePassword')
+        res.render('changePassword', {message: req.flash('message'), type: req.flash('type')})
     } else {
         res.redirect('/error')
     }
@@ -294,9 +306,13 @@ app.post('/change-password', async (req, res) => {
         let hash = crypto.createHash(algo).update(key).digest('hex')
         console.log(user)
         await User.updateOne({ userId: user.userId }, { $set: { password: hash } }).then((msg) => {
-            res.redirect('/profile')
+            req.flash('message', 'Password changed successfully!')
+            req.flash('type', 'success')
+            res.redirect('/change-password')
         }).catch((err) => {
-            console.log(err)
+            req.flash('message', 'Oops! Something went wrong...')
+            req.flash('type', 'danger')
+            res.redirect('/change-password')
         })
     } else {
         res.redirect('/error')

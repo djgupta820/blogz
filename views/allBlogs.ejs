@@ -10,6 +10,13 @@
             </div>
             <a href="/new-blog" class="btn-success">Add New Post</a>
         <% } %>
+
+        <% if (message !== '') { %>
+            <div class="message-<%= type %>">
+                <%= message %>
+            </div>
+        <% } %>
+
         <% for(let blog of blogs){ %>
             <div class="blog">
                 <div class="blog-top">
@@ -24,7 +31,7 @@
                     <%- blog.marked %>
                 </div>
                 <form action="/view-blog/<%= blog.blogId %>" method="get" class="blog-view">
-                    <button> View </button>
+                    <input type="submit" value="View" class="btn btn-success" style="color: white; font-size: 1em; cursor: pointer;">
                     <a href="/edit/<%= blog.blogId %>" class="btn-success">Edit</a>
                 </form>
                 <form action="/delete/<%= blog.blogId %>" method="post" style="width: 100%; display: flex; justify-content: center;">

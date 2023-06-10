@@ -3,6 +3,11 @@
 
 <body>
     <div class="ball" style="right: 5em;"></div>
+    <% if (message !== '') { %>
+        <div class="message-<%= type %>">
+            <%= message %>
+        </div>
+    <% } %>
     <form action="" method="post" class="form" id="register">
         <h1> Register </h1>
         <div class="form-data">

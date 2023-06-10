@@ -22,7 +22,7 @@
                         <h4>
                             <%= blog.title %> <i style="color:steelblue; font-size: 0.8em;"> (<%= blog.category %>) </i>
                         </h4>
-                        <%= blog.marked %>
+                        <%- blog.marked %>
                     </div>
                     <form action="/unauth-view/<%= blog.blogId %>" method="get" class="blog-view">
                         <button> View </button>
