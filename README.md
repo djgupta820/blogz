@@ -1,4 +1,4 @@
-# <font color="green"> Blogz </font>
+# <span style="color:green;"> Blogz </span>
 A simple blogging/markdown web application 
 
 ### Technologies used
