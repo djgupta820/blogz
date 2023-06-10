@@ -10,6 +10,31 @@ A simple blogging/markdown web application
     <li> Project level modules are installed in the project </li>
 </ul>
 
+### Modules 
+<ul> 
+    <li> 
+        UnAuthenticated User
+        <ul> 
+            <li> View Home Page (All Blogs) (Index Page)</li>
+            <li> view Varticular Blog </li>
+            <li> Search Blog </li>
+            <li> Login (If Registered)</li>
+            <li> Register </li>
+        </ul>
+    </li>
+    <li> 
+        Authenticated User
+        <ul> 
+            <li> Login </li>
+            <li> View Home Page (All Blogs) (Index Page)</li>
+            <li> view Varticular Blog </li>
+            <li> Edit Blog </li>
+            <li> Delete Blog </li>
+            <li> Search Blog </li>
+            <li> Logout </li>
+        </ul>
+    </li>
+</ul>
 ## To run the application
 
 ### requirements
