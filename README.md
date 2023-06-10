@@ -1,5 +1,5 @@
-# <span style="color: red;"> Blogz </span>
-A simple blogging/markdown web application 
+# <span style="color: red;">Blogz</span>
+<span style="color: green;">A simple blogging/markdown web application</span>
 
 ### Technologies used
 <ul> 
